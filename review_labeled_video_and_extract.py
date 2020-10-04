@@ -56,6 +56,7 @@ while cap.isOpened():
 
   if ret == False:
     break
+  
   next_frame = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
   current_frame = next_frame - 1
   previous_frame = current_frame - 1
@@ -76,17 +77,21 @@ while cap.isOpened():
   # show one frame at a time
   key = cv2.waitKey(0)
   while key not in [ord('q'), ord('f'), ord('b'), ord('s')]:
-    key = cv2.waitKey(0)
-    # Quit when 'q' is pressed
-    if key == ord('q'):
-      break
-    if key == ord('b'):
-      if previous_frame >= 0:
-        cap.set(cv2.CAP_PROP_POS_FRAMES, previous_frame)
-    if key == ord('s'):
-      print("frame {} selected".format(int(current_frame)))
-      frame_list.append(current_frame)
-   
+     key = cv2.waitKey(0)
+  print(key)
+  # Quit when 'q' is pressed
+  if key == ord('q'):
+    break
+    
+  if key == ord('b'):
+    print("move to {}".format(previous_frame))
+    if previous_frame >= 0:
+      cap.set(cv2.CAP_PROP_POS_FRAMES, previous_frame)
+      
+  if key == ord('s'):
+    print("frame {} selected".format(int(current_frame)))
+    frame_list.append(current_frame)
+
 cap.release()
 
 
@@ -99,17 +104,17 @@ if(len(frame_list)>0):
   if (cap.isOpened()== False): 
     print("Error opening video stream or file")
     
-    fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-    out = cv2.VideoWriter(args.output_video_name, fourcc , 30.0, (int(width),int(height)))
+  fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+  out = cv2.VideoWriter(args.output_video_name, fourcc , 30.0, (int(width),int(height)))
         
-    for index in frame_list:
-      cap.set(cv2.CAP_PROP_POS_FRAMES, index)
-      ret, frame = cap.read()
-      out.write(frame)
-
+  for index in frame_list:
+    cap.set(cv2.CAP_PROP_POS_FRAMES, index)
+    ret, frame = cap.read()
+    out.write(frame)
+    
     # When everything done, release the video capture object   
-    out.release()
-    cap.release()
+  out.release()
+  cap.release()
       
 # Closes all the frames
 cv2.destroyAllWindows()
