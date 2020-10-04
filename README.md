@@ -1,9 +1,10 @@
-# dlc_review_labeled_video
-Python script allowing you to review a video labelled from DeepLabCut and created a new video with mislabeled frames to improve your model.
+# review_labeled_video_and_extract
 
-I often find that DeepLabCut does a very good job at tracking my target objects but there are always mislabeled frames. These are often associated with relatively rare events that were not included in the training set. 
+Python script allowing you to review a video labelled from a deep neural network (e.g., DeepLabCut) and created a new video with mislabeled frames that can be used to re-train and hopefully improve your model.
 
-The main goal of the script is to create videos of challenging rare events for your network. You can then use frames of this video to retrain your network to improve it.
+I often use DeepLabCut to train neural networks with the aim of tracking animals. The models are often very good most of the time but there are always mislabeled frames. These are often associated with relatively rare events that were not represented in the images used to train the network. 
+
+The main goal of the script is to review your labeled video and create a new video of challenging rare events (possibly mislabeled frames). You can then use the "challenging" video to retrain your network and hopefully improve it.
 
 
 ## Instruction
@@ -18,4 +19,5 @@ The main goal of the script is to create videos of challenging rare events for y
 
 ## Example case
 
-I train a network with DeepLabCut 
+I train a network with DeepLabCut. The object to track was a lever box (a lever for operant conditioning on wheels). After one iteration of training of 226500 iterations, and 90 % of the images in the training set, I got an error of 2.66 and 11.85 pixels for the train and validation set. 
+
