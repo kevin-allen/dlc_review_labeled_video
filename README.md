@@ -30,3 +30,12 @@ You will need a python environment with openCV
 ```
  conda install -c conda-forge opencv=4.1.0
 ```
+## Usage
+To extract and save some frames.
+
+Use "f", "b", "s" and "q" to move forward, backward, save frames and quit.
+
+```
+python ~/repo/review_labeled_video_and_extract/review_labeled_video_and_extract.py  mn5183-29072020-1513.arena_topDLC_resnet50_leverDetectorSep29shuffle1_226500_labeled.mp4 mn5183-29072020-1513.arena_top.avi selected_frames_mn5183-29072020-1513.arena_top.avi
+```
+
