@@ -21,3 +21,12 @@ The main goal of the script is to review your labeled video and create a new vid
 
 I train a network with DeepLabCut. The object to track was a lever box (a lever for operant conditioning on wheels). After one iteration of training of 226500 iterations, and 90 % of the images in the training set, I got an error of 2.66 and 11.85 pixels for the train and validation set. 
 
+The network had problems when the mouse or my hands was close to the lever. So I used review_labeled_video_and_extract to create a video containing only frames in which my hands or a mouse were close to the lever.
+
+
+## Installation
+
+You will need a python environment with openCV
+```
+ conda install -c conda-forge opencv=4.1.0
+```
