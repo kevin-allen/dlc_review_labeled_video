@@ -50,6 +50,7 @@ cap.set(cv2.CAP_PROP_POS_FRAMES,current_frame)
 
 
 frame_list=[]
+label=""
 while cap.isOpened():
   # Read video capture
   ret, frame = cap.read()
@@ -68,7 +69,23 @@ while cap.isOpened():
               cv2.FONT_HERSHEY_SIMPLEX, 1,  
               (255, 255, 255),  
               2,  
+              cv2.LINE_AA)
+  cv2.putText(frame,  
+              "{0}".format(label),  
+              (50, 100),  
+              cv2.FONT_HERSHEY_SIMPLEX, 1,  
+              (255, 255, 255),  
+              2,  
               cv2.LINE_AA) 
+
+  cv2.putText(frame,  
+              "{0} saved".format(len(frame_list)),  
+              (int(width)-200, 50),  
+              cv2.FONT_HERSHEY_SIMPLEX, 1,  
+              (255, 255, 255),  
+              2,  
+              cv2.LINE_AA) 
+
   
   
   # Display each frame
@@ -78,18 +95,21 @@ while cap.isOpened():
   key = cv2.waitKey(0)
   while key not in [ord('q'), ord('f'), ord('b'), ord('s')]:
      key = cv2.waitKey(0)
-  print(key)
   # Quit when 'q' is pressed
   if key == ord('q'):
     break
-    
+
+  if key == ord('f'):
+    label="forward"
+    continue
+  
   if key == ord('b'):
-    print("move to {}".format(previous_frame))
+    label="backward"
     if previous_frame >= 0:
       cap.set(cv2.CAP_PROP_POS_FRAMES, previous_frame)
       
   if key == ord('s'):
-    print("frame {} selected".format(int(current_frame)))
+    label="saving"
     frame_list.append(current_frame)
 
 cap.release()
