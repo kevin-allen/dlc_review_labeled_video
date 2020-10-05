@@ -23,6 +23,11 @@ I train a network with DeepLabCut. The object to track was a lever box (a lever 
 
 The network had problems when the mouse or my hands was close to the lever. So I used review_labeled_video_and_extract to create a video containing only frames in which my hands or a mouse were close to the lever.
 
+I retrain the network with 120 new frames from the videos of problematic frames and here were the results:
+Results for 148000  training iterations: 90 1 train error: 2.95 pixels. Test error: 3.52  pixels.
+
+The error on the test set seems to be lower on the second round. I then reviewed the labeled videos and they looked much better.
+
 
 ## Installation
 
