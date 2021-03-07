@@ -16,6 +16,47 @@ import os
 import cv2
 import numpy as np
 from math import trunc
+import matplotlib.pyplot as plt
+
+
+
+class _Getch:
+    """Gets a single character from standard input.  Does not echo to the
+screen."""
+    def __init__(self):
+        try:
+            self.impl = _GetchWindows()
+        except ImportError:
+            self.impl = _GetchUnix()
+
+    def __call__(self): return self.impl()
+
+
+class _GetchUnix:
+    def __init__(self):
+        import tty, sys
+
+    def __call__(self):
+        import sys, tty, termios
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(sys.stdin.fileno())
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+
+
+class _GetchWindows:
+    def __init__(self):
+        import msvcrt
+
+    def __call__(self):
+        import msvcrt
+        return msvcrt.getch()
+
+
 
 
 parser = argparse.ArgumentParser()
@@ -29,7 +70,7 @@ print(args.labeled_video_name)
 print(args.unlabeled_video_name)
 print(args.output_video_name)
 
-
+print (cv2.__version__)
 # Create a VideoCapture object and read from input file
 # If the input is the camera, pass 0 instead of the video file name
 cap = cv2.VideoCapture(args.labeled_video_name)
@@ -51,6 +92,14 @@ cap.set(cv2.CAP_PROP_POS_FRAMES,current_frame)
 
 frame_list=[]
 label=""
+
+
+ret, frame = cap.read()
+fig, ax = plt.subplots()
+im1 = ax.imshow(cv2.cvtColor(frame,cv2.COLOR_BGR2RGB))
+plt.ion()
+
+
 while cap.isOpened():
   # Read video capture
   ret, frame = cap.read()
@@ -86,31 +135,38 @@ while cap.isOpened():
               2,  
               cv2.LINE_AA) 
 
-  
-  
-  # Display each frame
-  cv2.imshow("video", frame)
-  
-  # show one frame at a time
-  key = cv2.waitKey(0)
-  while key not in [ord('q'), ord('f'), ord('b'), ord('s')]:
-     key = cv2.waitKey(0)
-  # Quit when 'q' is pressed
-  if key == ord('q'):
-    break
 
-  if key == ord('f'):
+
+  im1.set_data(cv2.cvtColor(frame,cv2.COLOR_BGR2RGB))
+  plt.pause(0.001)
+  
+
+  getch = _Getch()
+  print ("Please enter a,f,F,b,B or s: ")
+  key = getch()
+
+ # Quit when 'q' is pressed
+  if key == 'q':
+    break
+  elif key == 'f':
     label="forward"
     continue
-  
-  if key == ord('b'):
+  elif key == 'F':
+    label="Forward"
+    cap.set(cv2.CAP_PROP_POS_FRAMES, next_frame+10)
+  elif key == 'b':
     label="backward"
     if previous_frame >= 0:
       cap.set(cv2.CAP_PROP_POS_FRAMES, previous_frame)
-      
-  if key == ord('s'):
+  elif key == 'B':
+    label="backward"
+    if previous_frame-10 >= 0:
+      cap.set(cv2.CAP_PROP_POS_FRAMES, previous_frame-10)
+  elif key == 's':
     label="saving"
     frame_list.append(current_frame)
+
+plt.ioff()
 
 cap.release()
 
@@ -135,6 +191,7 @@ if(len(frame_list)>0):
     # When everything done, release the video capture object   
   out.release()
   cap.release()
-      
-# Closes all the frames
-cv2.destroyAllWindows()
+
+  
+
+
